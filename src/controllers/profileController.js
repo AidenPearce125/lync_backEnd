@@ -13,10 +13,12 @@ exports.completeProfile = async (req, res, next) => {
     user.graduationYear = body.graduationYear ? Number(body.graduationYear) : user.graduationYear;
     if (req.file) user.image = req.file.path;
     if (body.interests) {
-      try { user.interests = JSON.parse(body.interests); } catch(e) { user.interests = body.interests.split(',').map(s=>s.trim()); }
+      try { user.interests = JSON.parse(body.interests); }
+       catch(e) { user.interests = body.interests.split(',').map(s=>s.trim()); }
     }
     if (body.skills) {
-      try { user.skills = JSON.parse(body.skills); } catch(e) { user.skills = body.skills.split(',').map(s=>s.trim()); }
+      try { user.skills = JSON.parse(body.skills); } 
+      catch(e) { user.skills = body.skills.split(',').map(s=>s.trim()); }
     }
     await user.save();
     appEvents.emit('user:profile_completed', user);
